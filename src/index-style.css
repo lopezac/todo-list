@@ -1,0 +1,30 @@
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+
+    display: grid;
+    grid-template-columns: 1fr 6fr;
+    grid-template-rows: 1fr 7fr 1fr;
+    grid-template-areas: "sidebar header"
+                         "sidebar content"
+                         "footer footer";
+}
+
+.header {
+    grid-area: header;
+}
+
+.sidebar {
+    grid-area: sidebar;
+}
+
+.content {
+    grid-area: content;
+}
+
+.footer {
+    grid-area: footer;
+}
