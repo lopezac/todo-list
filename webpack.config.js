@@ -6,15 +6,12 @@ module.exports = {
         index: "./src/index.js",
     },
     plugins: [
-        new htmlWebpackPlugin({
-            title: "Todo list"
-        }),
+
     ],
     devtool: "inline-source-map",
     output: {
-        filename: "[name]_bundle.js",
+        filename: "[name].js",
         path: path.resolve(__dirname, "dist"),
-        clean: true,
     },
     module: {
         rules: [

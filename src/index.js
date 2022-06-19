@@ -1,74 +1,44 @@
 import "modern-normalize";
 import "./index-style.css";
+import task from "./modules/task.js";
+import project from "./modules/project.js";
+import ui from "./modules/ui.js";
+import todoList from "./modules/todoList.js";
 
-const page = (() => {
-    const create = () => {
-        const header = createHeader();
-        const sidebar = createSidebar();
-        const content = createContent();
-        const footer = createFooter();
-
-        document.body.append(header, sidebar, content, footer);
+const page = ((task, project, ui, todoList) => {
+    const start = () => {
+        // ui.start();
     };
 
-    const createHeader = () => {
-        const header = document.createElement("header");
-        header.classList.add("header");
-
-        const addTaskDiv = document.createElement("add-task");
-        addTaskDiv.classList.add("add-task");
-        addTaskDiv.textContent = "+";
-
-        header.appendChild(addTaskDiv);
-        return header;
+    const listenSubmitFormBtns = () => {
+        const submitFormBtns = document.querySelectorAll(".submit-form-btn");
+        for (const btn of submitFormBtns) {
+            btn.addEventListener("click", () => submitForm(btn));
+        }
     };
 
-    const createSidebar = () => {
-        const sidebar = document.createElement("div");
-        sidebar.classList.add("sidebar");
-
-        const datesProject = document.createElement("section");
-        datesProject.classList.add("project-dates");
-
-        const projectsName = document.createElement("section");
-        projectsName.classList.add("project-names");
-
-        const sidebarTitle = document.createElement("h1");
-        sidebarTitle.textContent = "Todo List";
-
-        const projectsTitle = document.createElement("h2");
-        projectsTitle.textContent = "Projects";
-
-        const todayP = document.createElement("p");
-        todayP.classList.add("project-title", "today");
-        todayP.textContent = "Today";
-
-        const yesterdayP = document.createElement("p");
-        yesterdayP.classList.add("project-title", "yesterday");
-        yesterdayP.textContent = "Yesterday";
-
-        const weekP = document.createElement("p");
-        weekP.classList.add("project-title", "week");
-        weekP.textContent = "Next 7 days";
-
-        datesProject.append(todayP, yesterdayP, weekP);
-        sidebar.append(sidebarTitle, datesProject, projectsTitle, projectsName);
-        return sidebar;
+    const submitForm = btn => {
+        // refactor this into reusable method like getBtn'sForm(btn)
+        const form = btn.parentNode.parentNode;
+        const data = new FormData(form);
+        if (form.classList.contains("project-form")) {
+            todoList.createProject(data);
+        } else if (form.classList.contains("task-form")) {
+            todoList.createTask(data);
+        }
+    };
+    
+    const createTask = data => {
+        const task = taskManager.create(data);
+        const project = projectManager.find(task.project.title);
+        project.addTask(task);
+        projectManager.addProject(project);
+        updateViews();
     };
 
-    const createContent = () => {
-        const content = document.createElement("main");
-        content.classList.add("content");
+    const updateViews = () => {
 
-        return content;
     };
 
-    const createFooter = () => {
-        const footer = document.createElement("footer");
-        footer.classList.add("footer");
-
-        return footer;
-    };
-
-    create();
-})();
+    start();
+})(task, project, ui, todoList);
