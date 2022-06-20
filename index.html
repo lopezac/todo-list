@@ -21,6 +21,12 @@
         <section class="project-names"></section>
         <button type="button" class="add-project add-btn">Add project</button>
     </div>
+    <main class="tasks-section">
+
+    </main>
+    <footer class="footer">
+
+    </footer>
 
     <form method="get" class="task-form hidden">
         <p>
@@ -50,7 +56,7 @@
         </p>
         <p>
             <label for="project">Project</label>
-            <select name="project" id="project"></select>
+            <select name="project" id="project-select"></select>
         </p>
         <p>
             <button type="button" class="close-form-btn form-btn">Cancel</button>
@@ -66,10 +72,6 @@
             <input type="text" id="title" name="title" required>
         </p>
         <p>
-            <label for="description">Description</label>
-            <input type="text" id="description" name="description" required>
-        </p>
-        <p>
             <label for="priority">Priority</label>
             <select name="priority" id="priority">
                 <option value="very-high">Very high</option>
@@ -82,7 +84,7 @@
             <button type="button" class="close-form-btn form-btn">Cancel</button>
         </p>
         <p>
-            <button type="button" class="submit-form-btn form-btn">Add</button>
+            <button type="submit" class="submit-form-btn form-btn">Add</button>
         </p>
     </form>
 </body>
