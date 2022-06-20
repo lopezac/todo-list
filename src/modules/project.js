@@ -1,15 +1,19 @@
-const project = (title, prority, description) => {
+const project = (title, priority) => {
     const tasks = [];
 
-    const addTask = (task) => {
+    const addTask = task => {
 
     };
 
-    const removeTask = (task) => {
+    const removeTask = task => {
 
     };
 
-    return {title, priority, description, tasks};
+    const hasTask = task => {
+        return tasks.includes(task);
+    };
+
+    return {title, priority, tasks, addTask, removeTask, hasTask};
 };
 
 export default project;
