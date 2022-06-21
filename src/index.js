@@ -11,33 +11,88 @@ const page = ((ui, todoList) => {
         listenSubmitFormBtns();
     };
 
-    const listenSubmitFormBtns = () => {
-        const submitFormBtns = document.querySelectorAll(".submit-form-btn");
-        for (const btn of submitFormBtns) {
+    const listenProjectBtns = (project) => {
+        const projectHeader = document.querySelector(".project-header");
+        const projectBtns = projectHeader.querySelectorAll("p");
+
+        for (const btn of projectBtns) {
             btn.addEventListener("click", (e) => {
                 e.preventDefault();
-                submitForm(e.target);
-                ui.closeForm(e.target);
+                if (e.target.classList.contains("delete")) deleteProject(project);
+                else if (e.target.classList.contains("edit")) editProject(project);
             });
         }
     };
+
+    const listenTaskBtns = task => {
+        const taskBtns = document.querySelectorAll(".tasks-section > .task > p");
+        
+        for (const btn of taskBtns) {
+            btn.addEventListener("click", (e) => {
+                e.preventDefault();
+                if (e.target.classList.contains("delete")) console.log(e.target.firstChild.textContent)// deleteTask(task);
+                else if (e.target.classList.contains("edit")) editTask(task);
+                // else if (e.target.classList.contains("expand")) expandTask(task);
+            });
+        }
+    };
+
+    const deleteTask = task => {
+        todoList.deleteTask(task);
+        ui.deleteTask(task);
+    };
+
+    const editTask = task => {
+
+    };
+
+    const editProject = e => {
+
+    };
+    
+    const deleteProject = project => {
+        todoList.deleteProject(project);
+        ui.deleteProject(project);
+        if (currentProject === project) currentProject = null;
+    };
+
+    const listenSubmitFormBtns = () => {
+        const submitFormBtns = document.querySelectorAll(".submit-form-btn");
+        for (const btn of submitFormBtns) listenSubmitBtn(btn);
+    };
+    
+    const listenSubmitBtn = btn => {
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            submitForm(e.target);
+            ui.closeForm(e.target);
+        });
+    }
 
     const submitForm = btn => {
         // refactor this into reusable method like getBtn'sForm(btn)
         const form = btn.parentNode.parentNode;
         const data = convertFormData(new FormData(form));
 
-        if (form.classList.contains("project-form")) {
-            const project = todoList.createProject(data);
-            const projects = todoList.getProjects();
-            currentProject = project;
-
-            ui.updateProjectsDiv(projects);
-            ui.updateTaskForm(projects);
-        } else if (form.classList.contains("task-form")) {
-            const task = todoList.createTask(data);
-            if (currentProject.hasTask(task)) ui.updateTasksView(currentProject)
-        }
+        if (form.classList.contains("project-form")) createProject(data);
+        else if (form.classList.contains("task-form")) createTask(data);
+    };
+    
+    const createTask = data => {
+        const task = todoList.createTask(data);
+        if (currentProject.hasTask(task)) ui.updateTasksView(currentProject)
+        listenTaskBtns(task);
+    };
+    
+    const createProject = data => {
+        const project = todoList.createProject(data);
+        const projects = todoList.getProjects();
+        currentProject = project;
+    
+        ui.updateProjectsDiv(projects);
+        ui.updateTaskForm(projects);
+        ui.createProjectHeader(project);
+        listenProjectBtns(project);
     };
 
     const convertFormData = data => {

@@ -8,6 +8,7 @@ const todoList = ((Project, Task) => {
     const createProject = data => {
         const project = Project(data.title, data.priority);
         saveProject(project);
+        return project;
     };
 
     const saveProject = project => {
@@ -23,7 +24,8 @@ const todoList = ((Project, Task) => {
             data.priority, data.notes, data.project);
         const project = findProject(task.project);
         task.project = project;
-        project.addTask(task);
+        task.project.addTask(task);
+        return task;
     }
 
     const findProject = title => {
@@ -32,7 +34,25 @@ const todoList = ((Project, Task) => {
         }
     };
 
-    return {createProject, createTask, getProjects};
+    const deleteProject = project => {
+        for (let i = 0; i < projects.length; i++) {
+            // Maybe try comparing titles instead of objects
+            if (projects[i] === project) {
+                projects.splice(i, 1);
+            }
+        }
+    }
+
+    const deleteTask = task => {
+        const project = task.project;
+        console.log(project.tasks);
+        console.log(task);
+        project.removeTask(task);
+        console.log(project.tasks);
+    };
+
+    return {createProject, createTask, getProjects, findProject, deleteProject,
+            deleteTask};
 })(Project, Task);
 
 export default todoList;
