@@ -24,22 +24,27 @@ const page = ((ui, todoList) => {
         }
     };
 
-    const listenTaskBtns = task => {
+    const listenTaskBtns = () => {
         const taskBtns = document.querySelectorAll(".tasks-section > .task > p");
-        
+
         for (const btn of taskBtns) {
             btn.addEventListener("click", (e) => {
                 e.preventDefault();
-                if (e.target.classList.contains("delete")) console.log(e.target.firstChild.textContent)// deleteTask(task);
-                else if (e.target.classList.contains("edit")) editTask(task);
+                const taskDiv = e.target.parentNode
+                if (e.target.classList.contains("delete")) deleteTask(taskDiv);
+                else if (e.target.classList.contains("edit")) editTask(taskDiv);
                 // else if (e.target.classList.contains("expand")) expandTask(task);
             });
         }
     };
 
-    const deleteTask = task => {
+    const deleteTask = taskDiv => {
+        const taskTitle = taskDiv.querySelector("h3");
+        const task = currentProject.findTask(taskTitle);
+        console.log(task);
+
         todoList.deleteTask(task);
-        ui.deleteTask(task);
+        ui.deleteTask(taskDiv);
     };
 
     const editTask = task => {
@@ -80,8 +85,10 @@ const page = ((ui, todoList) => {
     
     const createTask = data => {
         const task = todoList.createTask(data);
-        if (currentProject.hasTask(task)) ui.updateTasksView(currentProject)
-        listenTaskBtns(task);
+        if (currentProject.hasTask(task)) {
+            ui.updateTasksView(currentProject)
+        } 
+        listenTaskBtns();
     };
     
     const createProject = data => {

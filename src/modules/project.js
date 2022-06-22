@@ -15,7 +15,18 @@ const project = (title, priority) => {
         return tasks.includes(task);
     };
 
-    return {title, priority, tasks, addTask, removeTask, hasTask};
+    const getTask = task => {
+        return tasks.find(task);
+    };
+
+    const findTask = taskTitle => {
+        for (const task of tasks) {
+            if (task.title === taskTitle.textContent) return task;
+        }
+    }
+
+    return {title, priority, tasks, addTask, removeTask, hasTask, getTask,
+        findTask};
 };
 
 export default project;

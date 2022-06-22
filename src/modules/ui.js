@@ -134,9 +134,8 @@ const ui = (() => {
     };
 
     const deleteTask = task => {
-        const taskDiv = findTask(task);
-        console.log(taskDiv.firstChild.textContent);
-        tasksSection.removeChild(taskDiv);
+        // const taskDiv = findTask(task);
+        tasksSection.removeChild(task);
     };
 
     const findTask = task => {
@@ -148,7 +147,7 @@ const ui = (() => {
 
     start();
 
-    return {start, updateProjectsDiv, closeForm, updateTaskForm,
+    return {start, updateProjectsDiv, closeForm, updateTaskForm, findTask,
         updateTasksView, createProjectHeader, deleteProject, deleteTask};
 })();
 
