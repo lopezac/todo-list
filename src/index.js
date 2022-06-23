@@ -5,6 +5,7 @@ import todoList from "./modules/todoList.js";
 
 const page = ((ui, todoList) => {
     let currentProject;
+    let currentTask;
 
     const start = () => {
         // ui.start();
@@ -43,10 +44,15 @@ const page = ((ui, todoList) => {
         const task = currentProject.findTask(taskTitle);
         ui.toggleEditTaskForm();
         ui.fillEditForm(task);
+        currentTask = task;
     };
 
-    const editTask = taskDiv => {
-
+    const editTask = data => {
+        console.log(data, currentTask);
+        data.project = todoList.findProject(data.project);
+        currentTask.project.replaceTask(currentTask, data);
+        ui.updateTasksView(currentProject);
+        listenTaskBtns();
     };
 
     const editProject = e => {
@@ -88,7 +94,7 @@ const page = ((ui, todoList) => {
 
         if (btn.classList.contains("submit-form-btn")) {
             submitForm(formDiv, data);
-        } else if (btn.classList.contains(".edit-form-btn")) {
+        } else if (btn.classList.contains("edit-form-btn")) {
             editForm(formDiv, data);
         }
     };

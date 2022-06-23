@@ -25,10 +25,16 @@ const project = (title, priority) => {
                 return task;
             }
         }
-    }
+    };
+
+    const replaceTask = (task, newTask) => {
+        for (let i = 0; i < tasks.length; i++) {
+            if (tasks[i] === task) tasks.splice(i, 1, newTask);
+        }
+    };
 
     return {title, priority, tasks, addTask, removeTask, hasTask, getTask,
-        findTask};
+        findTask, replaceTask};
 };
 
 export default project;

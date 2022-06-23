@@ -2,11 +2,11 @@ const ui = (() => {
     const taskFormDiv = document.querySelector(".task-form");
     const projectFormDiv = document.querySelector(".project-form");
     
-    const taskForm = document.querySelector(".task-form > form");
-    const projectForm = document.querySelector(".project-form > form");
-
     const editTaskFormDiv = document.querySelector(".task-form.edit-form");
     const editProjectFormDiv = document.querySelector(".project-form.edit-form");
+    
+    const editTaskForm = editTaskFormDiv.querySelector("form");
+    const editProjectForm = editProjectFormDiv.querySelector("form");
     
     const addTaskBtn = document.querySelector(".add-task");
     const addProjectBtn = document.querySelector(".add-project");
@@ -113,12 +113,17 @@ const ui = (() => {
 
     const updateTaskForm = projects => {
         const projectsTaskForm = document.querySelector("#project-select");
+        const projectsEditTaskForm = document.querySelector("#project-select-edit");
+
         for (const project of projects) {
             const option = document.createElement("option");
             option.value = project.title;
             option.textContent = project.title;
+            const option2 = option.cloneNode(true);
 
-            projectsTaskForm.appendChild(option);
+            projectsTaskForm.append(option);
+            projectsEditTaskForm.append(option2);
+
         }
     };
 
@@ -162,7 +167,12 @@ const ui = (() => {
     };
 
     const fillEditForm = task => {
-
+        for (const row of editTaskForm) {
+            if (row.type === "button") continue;
+            const name = row.name;
+            if (row.name === "project") row.value = task[name].title;
+            else row.value = task[name];
+        }
     };
 
     start();
