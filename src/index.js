@@ -8,7 +8,7 @@ const page = ((ui, todoList) => {
 
     const start = () => {
         // ui.start();
-        listenSubmitFormBtns();
+        listenFormBtns();
     };
 
     const listenProjectBtns = (project) => {
@@ -32,57 +32,77 @@ const page = ((ui, todoList) => {
                 e.preventDefault();
                 const taskDiv = e.target.parentNode
                 if (e.target.classList.contains("delete")) deleteTask(taskDiv);
-                else if (e.target.classList.contains("edit")) editTask(taskDiv);
+                else if (e.target.classList.contains("edit")) editTaskForm(taskDiv);
                 // else if (e.target.classList.contains("expand")) expandTask(task);
             });
         }
     };
 
+    const editTaskForm = taskDiv => {
+        const taskTitle = taskDiv.querySelector("h3");
+        const task = currentProject.findTask(taskTitle);
+        ui.toggleEditTaskForm();
+        ui.fillEditForm(task);
+    };
+
+    const editTask = taskDiv => {
+
+    };
+
+    const editProject = e => {
+        ui.toggleHiddenDiv();
+    };
+
     const deleteTask = taskDiv => {
         const taskTitle = taskDiv.querySelector("h3");
         const task = currentProject.findTask(taskTitle);
-        console.log(task);
 
         todoList.deleteTask(task);
         ui.deleteTask(taskDiv);
     };
 
-    const editTask = task => {
-
-    };
-
-    const editProject = e => {
-
-    };
-    
     const deleteProject = project => {
         todoList.deleteProject(project);
         ui.deleteProject(project);
         if (currentProject === project) currentProject = null;
     };
 
-    const listenSubmitFormBtns = () => {
-        const submitFormBtns = document.querySelectorAll(".submit-form-btn");
-        for (const btn of submitFormBtns) listenSubmitBtn(btn);
+    const listenFormBtns = () => {
+        const formBtns = document.querySelectorAll(".form-btn");
+        
+        for (const btn of formBtns) listenFormBtn(btn);
     };
-    
-    const listenSubmitBtn = btn => {
+
+    const listenFormBtn = btn => {
         btn.addEventListener("click", (e) => {
             e.preventDefault();
-            submitForm(e.target);
+            decideFormBtn(e.target);
             ui.closeForm(e.target);
         });
     }
 
-    const submitForm = btn => {
-        // refactor this into reusable method like getBtn'sForm(btn)
+    const decideFormBtn = btn => {
         const form = btn.parentNode.parentNode;
         const data = convertFormData(new FormData(form));
+        const formDiv = form.parentNode;
 
+        if (btn.classList.contains("submit-form-btn")) {
+            submitForm(formDiv, data);
+        } else if (btn.classList.contains(".edit-form-btn")) {
+            editForm(formDiv, data);
+        }
+    };
+
+    const editForm = (form, data) => {
+        if (form.classList.contains("project-form")) editProject(data);
+        else if (form.classList.contains("task-form")) editTask(data);
+    };
+
+    const submitForm = (form, data) => {
         if (form.classList.contains("project-form")) createProject(data);
         else if (form.classList.contains("task-form")) createTask(data);
     };
-    
+
     const createTask = data => {
         const task = todoList.createTask(data);
         if (currentProject.hasTask(task)) {

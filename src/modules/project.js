@@ -21,7 +21,9 @@ const project = (title, priority) => {
 
     const findTask = taskTitle => {
         for (const task of tasks) {
-            if (task.title === taskTitle.textContent) return task;
+            if (task.title === taskTitle.textContent) {
+                return task;
+            }
         }
     }
 

@@ -1,17 +1,26 @@
 const ui = (() => {
-    const taskForm = document.querySelector(".task-form");
+    const taskFormDiv = document.querySelector(".task-form");
+    const projectFormDiv = document.querySelector(".project-form");
+    
+    const taskForm = document.querySelector(".task-form > form");
+    const projectForm = document.querySelector(".project-form > form");
+
+    const editTaskFormDiv = document.querySelector(".task-form.edit-form");
+    const editProjectFormDiv = document.querySelector(".project-form.edit-form");
+    
     const addTaskBtn = document.querySelector(".add-task");
-    const projectForm = document.querySelector(".project-form");
     const addProjectBtn = document.querySelector(".add-project");
+    
     const projectsSection = document.querySelector(".project-names");
     const tasksSection = document.querySelector(".tasks-section");
+    
     const projectHeader = document.querySelector(".project-header");
     const editProjectHeaderBtn = document.querySelector(".project-header > .edit");
     const deleteProjectHeaderBtn = document.querySelector(".project-header > .delete");
 
     const start = () => {
-        addTaskBtn.addEventListener("click", () => toggleHiddenDiv(taskForm));
-        addProjectBtn.addEventListener("click", () => toggleHiddenDiv(projectForm));
+        addTaskBtn.addEventListener("click", () => toggleHiddenDiv(taskFormDiv));
+        addProjectBtn.addEventListener("click", () => toggleHiddenDiv(projectFormDiv));
         listenCloseForm();
     };
 
@@ -28,7 +37,7 @@ const ui = (() => {
     }
 
     const closeForm = (btn) => {
-        toggleHiddenDiv(btn.parentNode.parentNode);
+        toggleHiddenDiv(btn.parentNode.parentNode.parentNode);
     };
 
     const updateProjectsDiv = (projects) => {
@@ -134,7 +143,6 @@ const ui = (() => {
     };
 
     const deleteTask = task => {
-        // const taskDiv = findTask(task);
         tasksSection.removeChild(task);
     };
 
@@ -145,10 +153,23 @@ const ui = (() => {
         }
     };
 
+    const toggleEditTaskForm = () => {
+        toggleHiddenDiv(editTaskFormDiv);
+    };
+
+    const toggleEditProjectForm = () => {
+        toggleHiddenDiv(editProjectFormDiv);
+    };
+
+    const fillEditForm = task => {
+
+    };
+
     start();
 
     return {start, updateProjectsDiv, closeForm, updateTaskForm, findTask,
-        updateTasksView, createProjectHeader, deleteProject, deleteTask};
+        updateTasksView, createProjectHeader, deleteProject, deleteTask,
+        toggleHiddenDiv, toggleEditProjectForm, toggleEditTaskForm, fillEditForm};
 })();
 
 export default ui;
