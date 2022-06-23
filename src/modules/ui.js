@@ -17,6 +17,7 @@ const ui = (() => {
     const projectHeader = document.querySelector(".project-header");
     const editProjectHeaderBtn = document.querySelector(".project-header > .edit");
     const deleteProjectHeaderBtn = document.querySelector(".project-header > .delete");
+    const projectHeaderTitle = projectHeader.querySelector("h1");
 
     const start = () => {
         addTaskBtn.addEventListener("click", () => toggleHiddenDiv(taskFormDiv));
@@ -95,14 +96,17 @@ const ui = (() => {
         return article;
     }
 
-    const createProjectHeader = project => {
-        const title = document.createElement("h1");
-        title.textContent = project.title;
+    const updateProjectHeader = project => {
+        projectHeaderTitle.textContent = project.title;
 
-        editProjectHeaderBtn.classList.remove("hidden");
-        deleteProjectHeaderBtn.classList.remove("hidden");
-        
-        projectHeader.append(title);
+        // see to refactorr this and deleteProjectHeader()
+        if (projectHeaderTitle.textContent === "") {
+            editProjectHeaderBtn.classList.add("hidden");
+            deleteProjectHeaderBtn.classList.add("hidden");
+        } else {
+            editProjectHeaderBtn.classList.remove("hidden");
+            deleteProjectHeaderBtn.classList.remove("hidden");
+        }
     };
  
     const deleteChildren = (parent) => {
@@ -142,7 +146,7 @@ const ui = (() => {
     };
 
     const deleteProjectHeader = () => {
-        projectHeader.removeChild(projectHeader.querySelector("h1"));
+        projectHeaderTitle.textContent = "";
         editProjectHeaderBtn.classList.add("hidden");
         deleteProjectHeaderBtn.classList.add("hidden");
     };
@@ -166,7 +170,7 @@ const ui = (() => {
         toggleHiddenDiv(editProjectFormDiv);
     };
 
-    const fillEditForm = task => {
+    const fillEditTaskForm = task => {
         for (const row of editTaskForm) {
             if (row.type === "button") continue;
             const name = row.name;
@@ -175,11 +179,19 @@ const ui = (() => {
         }
     };
 
+    const fillEditProjectForm = project => {
+        for (const row of editProjectForm) {
+            if (row.type === "button") continue;
+            row.value = project[row.name];
+        }
+    };
+
     start();
 
     return {start, updateProjectsDiv, closeForm, updateTaskForm, findTask,
-        updateTasksView, createProjectHeader, deleteProject, deleteTask,
-        toggleHiddenDiv, toggleEditProjectForm, toggleEditTaskForm, fillEditForm};
+        updateTasksView, updateProjectHeader, deleteProject, deleteTask,
+        toggleHiddenDiv, toggleEditProjectForm, toggleEditTaskForm, 
+        fillEditTaskForm, fillEditProjectForm};
 })();
 
 export default ui;

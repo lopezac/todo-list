@@ -34,6 +34,10 @@ const todoList = ((Project, Task) => {
         }
     };
 
+    const getRandomProject = () => {
+        // return random project
+    };
+
     const deleteProject = project => {
         for (let i = 0; i < projects.length; i++) {
             // Maybe try comparing titles instead of objects
@@ -45,10 +49,7 @@ const todoList = ((Project, Task) => {
 
     const deleteTask = task => {
         const project = task.project;
-        console.log(project.tasks);
-        console.log(task);
         project.removeTask(task);
-        console.log(project.tasks);
     };
 
     return {createProject, createTask, getProjects, findProject, deleteProject,

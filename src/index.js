@@ -20,7 +20,7 @@ const page = ((ui, todoList) => {
             btn.addEventListener("click", (e) => {
                 e.preventDefault();
                 if (e.target.classList.contains("delete")) deleteProject(project);
-                else if (e.target.classList.contains("edit")) editProject(project);
+                else if (e.target.classList.contains("edit")) editProjectForm();
             });
         }
     };
@@ -43,20 +43,28 @@ const page = ((ui, todoList) => {
         const taskTitle = taskDiv.querySelector("h3");
         const task = currentProject.findTask(taskTitle);
         ui.toggleEditTaskForm();
-        ui.fillEditForm(task);
+        ui.fillEditTaskForm(task);
         currentTask = task;
     };
 
     const editTask = data => {
-        console.log(data, currentTask);
         data.project = todoList.findProject(data.project);
         currentTask.project.replaceTask(currentTask, data);
         ui.updateTasksView(currentProject);
         listenTaskBtns();
     };
 
-    const editProject = e => {
-        ui.toggleHiddenDiv();
+    const editProjectForm = () => {
+        ui.toggleEditProjectForm();
+        ui.fillEditProjectForm(currentProject);
+    };
+
+    const editProject = data => {
+        for (const [key, value] of Object.entries(data)) {
+            currentProject[key] = value;
+        }
+        ui.updateProjectHeader(currentProject);
+        ui.updateProjectsDiv(todoList.getProjects());
     };
 
     const deleteTask = taskDiv => {
@@ -70,7 +78,9 @@ const page = ((ui, todoList) => {
     const deleteProject = project => {
         todoList.deleteProject(project);
         ui.deleteProject(project);
-        if (currentProject === project) currentProject = null;
+        // if (currentProject === project) currentProject = null;
+        currentProject = todoList.getRandomProject();
+        ui.updateProjectsDiv(todoList.getProjects());
     };
 
     const listenFormBtns = () => {
@@ -124,7 +134,7 @@ const page = ((ui, todoList) => {
     
         ui.updateProjectsDiv(projects);
         ui.updateTaskForm(projects);
-        ui.createProjectHeader(project);
+        ui.updateProjectHeader(project);
         listenProjectBtns(project);
     };
 
