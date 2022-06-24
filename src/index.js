@@ -23,11 +23,8 @@ const page = ((ui, todoList) => {
     };
 
     const listenProjectBtn = (btn) => {
-        console.log("btn", btn);
-        // e.preventDefault();
         if (btn.classList.contains("delete")) deleteProject(currentProject);
         else if (btn.classList.contains("edit")) editProjectForm();
-        // }
     };
 
     const listenTaskBtns = () => {
@@ -39,7 +36,9 @@ const page = ((ui, todoList) => {
                 const taskDiv = e.target.parentNode
                 if (e.target.classList.contains("delete")) deleteTask(taskDiv);
                 else if (e.target.classList.contains("edit")) editTaskForm(taskDiv);
-                // else if (e.target.classList.contains("expand")) expandTask(task);
+                else if (e.target.classList.contains("expand")) {
+                    ui.decideIfExpandTask(taskDiv, currentProject);
+                }
             });
         }
     };
@@ -84,8 +83,6 @@ const page = ((ui, todoList) => {
         todoList.deleteProject(project);
         ui.deleteProject(project);
         currentProject = null;
-        // if (currentProject === project) currentProject = null;
-        // currentProject = todoList.getRandomProject();
         ui.updateProjectsDiv(todoList.getProjects());
         ui.updateTasksView(currentProject);
     };
@@ -142,7 +139,25 @@ const page = ((ui, todoList) => {
         ui.updateProjectsDiv(projects);
         ui.updateTaskForm(projects);
         ui.updateProjectHeader(project);
-        // listenProjectBtns(project);
+        listenProjectsName();
+    };
+
+    const listenProjectsName = () => {
+        const projectsNames = document.querySelector(".project-names");
+        for (const projectDiv of projectsNames.childNodes) {
+            const projectName = projectDiv.querySelector("p.name");
+            projectName.addEventListener("click", changeProject);
+        }
+    };
+
+    const changeProject = (e) => {
+        const projectTitle = e.target.textContent;
+        const project = todoList.findProject(projectTitle);
+        console.log("project", project);
+        currentProject = project;
+        ui.updateProjectHeader(currentProject);
+        ui.updateTasksView(currentProject);
+        listenTaskBtns();
     };
 
     const convertFormData = data => {

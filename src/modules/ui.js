@@ -1,3 +1,5 @@
+import format from 'date-fns/format';
+
 const ui = (() => {
     const taskFormDiv = document.querySelector(".task-form");
     const projectFormDiv = document.querySelector(".project-form");
@@ -100,14 +102,8 @@ const ui = (() => {
     const updateProjectHeader = project => {
         projectHeaderTitle.textContent = project.title;
 
-        // see to refactorr this and deleteProjectHeader()
-        // if (projectHeaderTitle.textContent === "") {
-        //     editProjectHeaderBtn.classList.add("hidden");
-        //     deleteProjectHeaderBtn.classList.add("hidden");
-        // } else {
         editProjectHeaderBtn.classList.remove("hidden");
         deleteProjectHeaderBtn.classList.remove("hidden");
-        // }
     };
  
     const deleteChildren = (parent) => {
@@ -119,6 +115,9 @@ const ui = (() => {
     const updateTaskForm = projects => {
         const projectsTaskForm = document.querySelector("#project-select");
         const projectsEditTaskForm = document.querySelector("#project-select-edit");
+
+        deleteChildren(projectsTaskForm);
+        deleteChildren(projectsEditTaskForm);
 
         for (const project of projects) {
             const option = document.createElement("option");
@@ -187,12 +186,69 @@ const ui = (() => {
         }
     };
 
+    const decideIfExpandTask = (taskDiv, project) => {
+        if (taskDiv.querySelector(".description")) shrinkTask(taskDiv);
+        else expandTask(taskDiv, project);
+    };
+
+    const shrinkTask = taskDiv => {
+        const descriptionDiv = taskDiv.querySelector(".description");
+        const notesDiv = taskDiv.querySelector(".notes");
+        const dueDateDiv = taskDiv.querySelector(".due-date");
+
+        taskDiv.removeChild(descriptionDiv);
+        taskDiv.removeChild(notesDiv);
+        taskDiv.removeChild(dueDateDiv);
+    };
+
+    const expandTask = (taskDiv, project) => {
+        const taskTitle = taskDiv.querySelector("h3");
+        const task = project.findTask(taskTitle);
+
+        const descriptionDiv = document.createElement("div");
+        const descriptionLabel = document.createElement("h4");
+        const descriptionPara = document.createElement("p");
+
+        descriptionLabel.textContent = "Description:";
+        descriptionPara.textContent = task.description;
+
+        const notesDiv = document.createElement("div");
+        const notesLabel = document.createElement("h4");
+        const notesPara = document.createElement("p");
+
+        notesLabel.textContent = "Notes:";
+        notesPara.textContent = task.notes;
+
+        const dueDateDiv = document.createElement("div");
+        const dueDateLabel = document.createElement("h4");
+        const dueDatePara = document.createElement("p");
+
+        dueDateLabel.textContent = "dueDate:";
+        dueDatePara.textContent = formatDueDate(task.dueDate);
+
+        descriptionDiv.classList.add("description");
+        notesDiv.classList.add("notes");
+        dueDateDiv.classList.add("due-date");
+
+        descriptionDiv.append(descriptionLabel, descriptionPara);
+        notesDiv.append(notesLabel, notesPara);
+        dueDateDiv.append(dueDateLabel, dueDatePara);
+        taskDiv.append(descriptionDiv, notesDiv, dueDateDiv);
+    };
+
+    const formatDueDate = dueDate => {
+        const dateArray = dueDate.split("-");
+        const date = format(new Date(dateArray[0], dateArray[1], dateArray[2],
+                            dateArray[3], dateArray[4], dateArray[5]), "PPpp");
+        console.log("dueDate", dueDate, dateArray, date);
+    };
+
     start();
 
     return {start, updateProjectsDiv, closeForm, updateTaskForm, findTask,
         updateTasksView, updateProjectHeader, deleteProject, deleteTask,
         toggleHiddenDiv, toggleEditProjectForm, toggleEditTaskForm, 
-        fillEditTaskForm, fillEditProjectForm};
+        fillEditTaskForm, fillEditProjectForm, decideIfExpandTask};
 })();
 
 export default ui;
