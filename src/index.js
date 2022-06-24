@@ -10,19 +10,24 @@ const page = ((ui, todoList) => {
     const start = () => {
         // ui.start();
         listenFormBtns();
+        listenProjectBtns();
     };
 
-    const listenProjectBtns = (project) => {
+    const listenProjectBtns = () => {
         const projectHeader = document.querySelector(".project-header");
         const projectBtns = projectHeader.querySelectorAll("p");
 
         for (const btn of projectBtns) {
-            btn.addEventListener("click", (e) => {
-                e.preventDefault();
-                if (e.target.classList.contains("delete")) deleteProject(project);
-                else if (e.target.classList.contains("edit")) editProjectForm();
-            });
+            btn.addEventListener("click", listenProjectBtn.bind(this, btn));
         }
+    };
+
+    const listenProjectBtn = (btn) => {
+        console.log("btn", btn);
+        // e.preventDefault();
+        if (btn.classList.contains("delete")) deleteProject(currentProject);
+        else if (btn.classList.contains("edit")) editProjectForm();
+        // }
     };
 
     const listenTaskBtns = () => {
@@ -78,9 +83,11 @@ const page = ((ui, todoList) => {
     const deleteProject = project => {
         todoList.deleteProject(project);
         ui.deleteProject(project);
+        currentProject = null;
         // if (currentProject === project) currentProject = null;
-        currentProject = todoList.getRandomProject();
+        // currentProject = todoList.getRandomProject();
         ui.updateProjectsDiv(todoList.getProjects());
+        ui.updateTasksView(currentProject);
     };
 
     const listenFormBtns = () => {
@@ -135,7 +142,7 @@ const page = ((ui, todoList) => {
         ui.updateProjectsDiv(projects);
         ui.updateTaskForm(projects);
         ui.updateProjectHeader(project);
-        listenProjectBtns(project);
+        // listenProjectBtns(project);
     };
 
     const convertFormData = data => {

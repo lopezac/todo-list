@@ -63,6 +63,7 @@ const ui = (() => {
 
     const updateTasksView = (project) => {
         deleteChildren(tasksSection);
+        if (project === null) return;
         for (const task of project.tasks) {
             const taskArticle = createTask(task);
             tasksSection.appendChild(taskArticle);
@@ -100,13 +101,13 @@ const ui = (() => {
         projectHeaderTitle.textContent = project.title;
 
         // see to refactorr this and deleteProjectHeader()
-        if (projectHeaderTitle.textContent === "") {
-            editProjectHeaderBtn.classList.add("hidden");
-            deleteProjectHeaderBtn.classList.add("hidden");
-        } else {
-            editProjectHeaderBtn.classList.remove("hidden");
-            deleteProjectHeaderBtn.classList.remove("hidden");
-        }
+        // if (projectHeaderTitle.textContent === "") {
+        //     editProjectHeaderBtn.classList.add("hidden");
+        //     deleteProjectHeaderBtn.classList.add("hidden");
+        // } else {
+        editProjectHeaderBtn.classList.remove("hidden");
+        deleteProjectHeaderBtn.classList.remove("hidden");
+        // }
     };
  
     const deleteChildren = (parent) => {
