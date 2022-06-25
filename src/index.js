@@ -11,6 +11,22 @@ const page = ((ui, todoList) => {
         // ui.start();
         listenFormBtns();
         listenProjectBtns();
+        listenProjectDates();
+    };
+
+    const listenProjectDates = () => {
+        const projectDatesDiv = document.querySelectorAll(".project-dates > p");
+        for (const pDateDiv of projectDatesDiv) {
+            pDateDiv.addEventListener("click", decideProjectDateAction);
+        }
+    };
+
+    const decideProjectDateAction = e => {
+        const projectDate = e.target.classList[0];
+        const tasks = todoList.getTasksFromDate(projectDate);
+
+        ui.updateProjectHeader({title: projectDate});
+        ui.updateTasksView(tasks);
     };
 
     const listenProjectBtns = () => {
@@ -153,8 +169,8 @@ const page = ((ui, todoList) => {
     const changeProject = (e) => {
         const projectTitle = e.target.textContent;
         const project = todoList.findProject(projectTitle);
-        console.log("project", project);
         currentProject = project;
+
         ui.updateProjectHeader(currentProject);
         ui.updateTasksView(currentProject);
         listenTaskBtns();

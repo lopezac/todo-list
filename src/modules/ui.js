@@ -15,6 +15,7 @@ const ui = (() => {
     
     const projectsSection = document.querySelector(".project-names");
     const tasksSection = document.querySelector(".tasks-section");
+    const taskCheckbox = tasksSection.querySelector(".task > input");
     
     const projectHeader = document.querySelector(".project-header");
     const editProjectHeaderBtn = document.querySelector(".project-header > .edit");
@@ -22,9 +23,15 @@ const ui = (() => {
     const projectHeaderTitle = projectHeader.querySelector("h1");
 
     const start = () => {
-        addTaskBtn.addEventListener("click", () => toggleHiddenDiv(taskFormDiv));
+        addTaskBtn.addEventListener("click", showTaskForm);
         addProjectBtn.addEventListener("click", () => toggleHiddenDiv(projectFormDiv));
         listenCloseForm();
+    };
+
+    const showTaskForm = () => {
+        if (projectsSection.childNodes.length > 0) {
+            toggleHiddenDiv(taskFormDiv);
+        }
     };
 
     const toggleHiddenDiv = (div) => {
@@ -82,6 +89,7 @@ const ui = (() => {
         const checkBox = document.createElement("input");
         checkBox.type = "checkbox";
         checkBox.name = "checked";
+        checkBox.addEventListener("change", markTask);
 
         const expandPara = document.createElement("p");
         expandPara.textContent = "Expand";
@@ -98,6 +106,16 @@ const ui = (() => {
         article.append(name, checkBox, expandPara, editPara, deletePara);
         return article;
     }
+
+    const markTask = e => {
+        const task = e.target.parentNode;
+
+        if (task.classList.contains("task-checked")) {
+            task.classList.remove("task-checked");
+        } else {
+            task.classList.add("task-checked");
+        }
+    };
 
     const updateProjectHeader = project => {
         projectHeaderTitle.textContent = project.title;
@@ -237,10 +255,8 @@ const ui = (() => {
     };
 
     const formatDueDate = dueDate => {
-        const dateArray = dueDate.split("-");
-        const date = format(new Date(dateArray[0], dateArray[1], dateArray[2],
-                            dateArray[3], dateArray[4], dateArray[5]), "PPpp");
-        console.log("dueDate", dueDate, dateArray, date);
+        const date = format(new Date(dueDate), "PPpp");
+        return date;
     };
 
     start();
