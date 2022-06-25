@@ -6,29 +6,222 @@ body {
     min-height: 100%;
 
     display: grid;
-    grid-template-columns: 1fr 6fr;
-    grid-template-rows: 1fr 7fr 1fr;
+    grid-template-columns: 1fr 4fr;
+    grid-template-rows: auto 1fr auto;
     grid-template-areas: "sidebar header"
                          "sidebar content"
                          "footer footer";
+
+    --dark-gray: #111827;
+    --light-gray: #F9FAFB;
+    --dark-cyan: #164E63;
+    --light-blue: #DBEAFE;
+    --red: #DC2626;
 }
+
+/* Icons */
+
+.icon {
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+}
+
+.delete.icon {
+    background-image: url("./assets/delete.svg");
+}
+
+.edit.icon {
+    background-image: url("./assets/edit.svg");
+}
+
+.hidden {
+    display: none;
+}
+
+/* Header */
 
 .header {
     grid-area: header;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    justify-content: center;
+
+    background-color:  var(--light-blue);
+    padding: 10px 0;
 }
+
+.header > .project-header {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.header > .project-header > h1 {
+    font-size: 2.5rem;
+    margin: 0 5px 0 0;
+}
+
+.header > .project-header > p {
+    margin: 5px 0 0 0;
+}
+
+.header > button.add-task.add-btn {
+    font-size: 1.8rem;
+    margin-right: 30px;
+}
+
+/* Sidebar */
 
 .sidebar {
     grid-area: sidebar;
+    background-color:  var(--dark-cyan);
+    color: var(--light-gray);
+    padding: 0 10%;
 }
+
+.sidebar h1 {
+    font-size: 1.8rem;
+}
+
+.sidebar h2 {
+    font-size: 1.6rem;
+}
+
+.sidebar p {
+    font-size: 1.1rem;
+    padding-left: 15px;
+}
+
+.sidebar button.add-project,
+.header button.add-task {
+    font-size: 1.5rem;
+    background: #FEE2E2;
+    color: var(--red);
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+/* Content */
 
 .content {
     grid-area: content;
 }
 
-.footer {
-    grid-area: footer;
+.content > .tasks-section {
+
 }
 
-.hidden {
-    display: none;
+.tasks-section > .task {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    grid-template-rows: 1fr auto;
+    grid-template-areas: "title checkbox checkbox"
+                         "expand edit delete";
+}
+
+.task > h3 {
+    grid-area: title;
+}
+
+.task > input {
+    grid-area: checkbox;
+}
+
+.task > p {
+
+}
+
+.task > p.expand {
+    grid-area: expand;
+}
+
+.task > p.edit {
+    grid-area: edit;
+}
+
+.task > p.delete {
+    grid-area: delete;
+}
+
+/* Footer */
+
+.footer {
+    grid-area: footer;
+
+    background-color:  var(--dark-cyan);
+    color: var(--light-gray);
+}
+
+.footer > p {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: 5px;
+    margin: 5px 0;
+    font-size: 1rem;
+}
+
+.footer .github-icon {
+    background-image: url("./assets/github-32px.png");
+}
+
+/* Forms */
+
+.task-form,
+.project-form {
+    position: fixed;
+    left: 50%;
+    top:  50%;
+    transform: translate(-50%, -50%);
+
+    background-color:  var(--dark-cyan);
+    color: var(--light-gray);
+    border: 5px solid var(--dark-gray);
+    border-radius: 10px;
+}
+
+.task-form > h2,
+.project-form > h2 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.task-form > form,
+.project-form > form {
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px 10px 20px;
+}
+
+form > p > label {
+    width: 120px;
+    display: inline-block;
+    font-size: 1.4rem;
+}
+
+form > p > input,
+form > p > select {
+    width: 63%;
+}
+
+form > .buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+form > .buttons button {
+    font-size: 1.4rem;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    background: var(--light-blue);
+    color: var(--dark-gray);
 }

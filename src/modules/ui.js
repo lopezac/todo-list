@@ -96,12 +96,10 @@ const ui = (() => {
         expandPara.classList.add("expand");
 
         const editPara = document.createElement("p");
-        editPara.textContent = "Edit";
-        editPara.classList.add("edit");
+        editPara.classList.add("edit", "icon");
 
         const deletePara = document.createElement("p");
-        deletePara.textContent = "Delete";
-        deletePara.classList.add("delete");
+        deletePara.classList.add("delete", "icon");
 
         article.append(name, checkBox, expandPara, editPara, deletePara);
         return article;
