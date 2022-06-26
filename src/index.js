@@ -120,7 +120,6 @@ const page = ((ui, todoList) => {
     const decideFormBtn = btn => {
         const form = btn.parentNode.parentNode;
         const data = convertFormData(new FormData(form));
-        console.log("data, data")
         const formDiv = form.parentNode;
 
         if (btn.classList.contains("submit-form-btn")) {

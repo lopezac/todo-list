@@ -17,6 +17,9 @@ body {
     --dark-cyan: #164E63;
     --light-blue: #DBEAFE;
     --red: #DC2626;
+    --orange: #FB923C;
+    --yellow: #FDE047;
+    --purple: #7E22CE;
 }
 
 /* Icons */
@@ -84,17 +87,54 @@ body {
     padding: 0 10%;
 }
 
+.project-names > .project {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    /*column-gap: 5px;*/
+}
+
+.project > .priority {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    border-radius: 50px;
+}
+
+.project > .priority.very-high {
+    background-color: var(--red);
+}
+
+.project > .priority.high {
+    background-color: var(--purple);
+}
+
+.project > .priority.medium {
+    background-color: var(--orange);
+}
+
+.project > .priority.low {
+    background-color: var(--yellow);
+}
+
+
 .sidebar h1 {
     font-size: 1.8rem;
 }
 
 .sidebar h2 {
     font-size: 1.6rem;
+    margin-bottom: 5px;
 }
 
 .sidebar p {
     font-size: 1.1rem;
     padding-left: 15px;
+    margin: 15px 0px;
+}
+
+.sidebar button.add-project {
+    margin-top: 5px;
 }
 
 .sidebar button.add-project,
@@ -109,32 +149,70 @@ body {
 
 /* Content */
 
-.content {
+.tasks-section {
     grid-area: content;
-}
-
-.content > .tasks-section {
-
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    grid-auto-rows: min-content;
+    column-gap: 25px;
+    row-gap: 15px;
+    padding: 10px;
 }
 
 .tasks-section > .task {
     display: grid;
     grid-template-columns: 1fr auto auto;
-    grid-template-rows: 1fr auto;
+    grid-template-rows: 1fr auto auto;
     grid-template-areas: "title checkbox checkbox"
-                         "expand edit delete";
+                         "expand edit delete"
+                         "extra-info extra-info extra-info";
+    background-color: var(--light-gray);
+    border: 3px solid var(--dark-gray);
+    border-radius: 8px;
+    padding: 5px;
+    position: relative;
+}
+
+.tasks-section > .task > div.task-checked {
+    background-color: rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    z-index: 1;
+}
+
+.task > div.task-checked > hr {
+    flex: 1;
+    border: 15px solid rgba(0,0,0,0.3);
+}
+
+.task h3,
+.task h4,
+.task p {
+    margin: 0;
+}
+
+.task > div.extra-info {
+    grid-area: extra-info;
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    padding-bottom: 4px; 
 }
 
 .task > h3 {
     grid-area: title;
+    align-self: center;
 }
 
 .task > input {
     grid-area: checkbox;
-}
-
-.task > p {
-
+    height: 44px;
+    /*appearance: none;*/
+    z-index: 2;
 }
 
 .task > p.expand {
@@ -154,7 +232,7 @@ body {
 .footer {
     grid-area: footer;
 
-    background-color:  var(--dark-cyan);
+    background-color: #1e293b;
     color: var(--light-gray);
 }
 

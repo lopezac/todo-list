@@ -62,8 +62,7 @@ const ui = (() => {
             projectTitle.addEventListener("click", updateTasksView(project));
             
             const projectPriority = document.createElement("p");
-            projectPriority.textContent = project.priority;
-            projectPriority.classList.add("priority");
+            projectPriority.classList.add("priority", project.priority);
 
             projectDiv.append(projectTitle, projectPriority);
             projectsSection.appendChild(projectDiv);
@@ -107,11 +106,16 @@ const ui = (() => {
 
     const markTask = e => {
         const task = e.target.parentNode;
+        const hrDiv = task.querySelector(".task-checked");
 
-        if (task.classList.contains("task-checked")) {
-            task.classList.remove("task-checked");
+        if (hrDiv) {
+            task.removeChild(hrDiv);
         } else {
-            task.classList.add("task-checked");
+            const hrElem = document.createElement("hr");
+            const hrDiv = document.createElement("div");
+            hrDiv.classList.add("task-checked");
+            hrDiv.append(hrElem);
+            task.append(hrDiv);
         }
     };
 
@@ -208,13 +212,9 @@ const ui = (() => {
     };
 
     const shrinkTask = taskDiv => {
-        const descriptionDiv = taskDiv.querySelector(".description");
-        const notesDiv = taskDiv.querySelector(".notes");
-        const dueDateDiv = taskDiv.querySelector(".due-date");
+        const extraInfoDiv = taskDiv.querySelector(".extra-info");
 
-        taskDiv.removeChild(descriptionDiv);
-        taskDiv.removeChild(notesDiv);
-        taskDiv.removeChild(dueDateDiv);
+        taskDiv.removeChild(extraInfoDiv);
     };
 
     const expandTask = (taskDiv, project) => {
@@ -246,14 +246,18 @@ const ui = (() => {
         notesDiv.classList.add("notes");
         dueDateDiv.classList.add("due-date");
 
+        const extraInfoDiv = document.createElement("div");
+        extraInfoDiv.classList.add("extra-info");
+
         descriptionDiv.append(descriptionLabel, descriptionPara);
         notesDiv.append(notesLabel, notesPara);
         dueDateDiv.append(dueDateLabel, dueDatePara);
-        taskDiv.append(descriptionDiv, notesDiv, dueDateDiv);
+        extraInfoDiv.append(descriptionDiv, notesDiv, dueDateDiv);
+        taskDiv.append(extraInfoDiv);
     };
 
     const formatDueDate = dueDate => {
-        const date = format(new Date(dueDate), "PPpp");
+        const date = format(new Date(dueDate), "Pp");
         return date;
     };
 
