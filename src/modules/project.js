@@ -1,8 +1,9 @@
 const project = (title, priority) => {
-    const tasks = [];
+    let tasks = [];
 
     const addTask = task => {
         tasks.push(task);
+        return tasks;
     };
 
     const removeTask = task => {

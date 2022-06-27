@@ -4,10 +4,11 @@ import Task from "./task.js";
 import add from "date-fns/add"
 
 const todoList = ((Project, Task) => {
-    const projects = [];
+    let projects = [];
 
     const createProject = data => {
         const project = Project(data.title, data.priority);
+        if (data.tasks) project.tasks = data.tasks;
         saveProject(project);
         return project;
     };
@@ -24,8 +25,9 @@ const todoList = ((Project, Task) => {
         const task = Task(data.title, data.description, data.dueDate,
             data.priority, data.notes, data.project);
         const project = findProject(task.project);
-        task.project = project;
-        task.project.addTask(task);
+        task.project = project.title;
+        project.tasks = project.addTask(task);
+        console.log("todoList createTask", project.tasks);
         return task;
     }
 
@@ -54,6 +56,8 @@ const todoList = ((Project, Task) => {
             for (const task of project.tasks) {
                 const taskDate = new Date(task.dueDate);
 
+                if (taskDate.getFullYear() !== todayDate.getFullYear()) continue;
+
                 if ((date === "week") && (taskDate > todayDate) &&
                     (taskDate <= otherDate)) {
                     tasksObj.tasks.push(task);
@@ -71,13 +75,32 @@ const todoList = ((Project, Task) => {
         }
     }
 
-    const deleteTask = task => {
-        const project = task.project;
+    const deleteTask = (task, project) => {
         project.removeTask(task);
     };
 
+    const updateProjectTasks = project => {
+        for (const task of project.tasks) {
+            task.project = project.title;
+        }
+    };
+
+    const saveData = () => {
+        localStorage.data = JSON.stringify({projects: projects});
+    };
+
+    const loadData = () => {
+        const projectsData = JSON.parse(localStorage.data).projects;
+        return projectsData;
+    };
+
+    const checkIfData = () => {
+        return localStorage.data;
+    };
+
     return {createProject, createTask, getProjects, findProject, deleteProject,
-            deleteTask, getTasksFromDate};
+            deleteTask, getTasksFromDate, saveData, loadData, checkIfData,
+            updateProjectTasks};
 })(Project, Task);
 
 export default todoList;

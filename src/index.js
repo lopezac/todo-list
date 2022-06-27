@@ -8,10 +8,19 @@ const page = ((ui, todoList) => {
     let currentTask;
 
     const start = () => {
-        // ui.start();
         listenFormBtns();
         listenProjectBtns();
         listenProjectDates();
+
+        if (todoList.checkIfData()) {
+            const projects = todoList.loadData();
+            for (const projectData of projects) {
+                const project = createProject(projectData);
+                for (const taskData of projectData.tasks) {
+                    const task = createTask(taskData);
+                }
+            }
+        }
     };
 
     const listenProjectDates = () => {
@@ -68,8 +77,10 @@ const page = ((ui, todoList) => {
     };
 
     const editTask = data => {
-        data.project = todoList.findProject(data.project);
-        currentTask.project.replaceTask(currentTask, data);
+        const project = todoList.findProject(data.project);
+        data.project = project.title;
+        const curTaskProject = todoList.findProject(currentTask.project);
+        curTaskProject.replaceTask(currentTask, data);
         ui.updateTasksView(currentProject);
         listenTaskBtns();
     };
@@ -85,14 +96,18 @@ const page = ((ui, todoList) => {
         }
         ui.updateProjectHeader(currentProject);
         ui.updateProjectsDiv(todoList.getProjects());
+        ui.updateTaskForm(todoList.getProjects());
+        todoList.updateProjectTasks(currentProject);
+        listenTaskBtns();
     };
 
     const deleteTask = taskDiv => {
         const taskTitle = taskDiv.querySelector("h3");
         const task = currentProject.findTask(taskTitle);
 
-        todoList.deleteTask(task);
+        todoList.deleteTask(task, currentProject);
         ui.deleteTask(taskDiv);
+        todoList.saveData();
     };
 
     const deleteProject = project => {
@@ -101,6 +116,7 @@ const page = ((ui, todoList) => {
         currentProject = null;
         ui.updateProjectsDiv(todoList.getProjects());
         ui.updateTasksView(currentProject);
+        todoList.saveData();
     };
 
     const listenFormBtns = () => {
@@ -114,6 +130,7 @@ const page = ((ui, todoList) => {
             e.preventDefault();
             decideFormBtn(e.target);
             ui.closeForm(e.target);
+            todoList.saveData();
         });
     }
 
@@ -145,6 +162,7 @@ const page = ((ui, todoList) => {
             ui.updateTasksView(currentProject)
         } 
         listenTaskBtns();
+        return task;
     };
     
     const createProject = data => {
@@ -156,6 +174,8 @@ const page = ((ui, todoList) => {
         ui.updateTaskForm(projects);
         ui.updateProjectHeader(project);
         listenProjectsName();
+
+        return project;
     };
 
     const listenProjectsName = () => {

@@ -7,13 +7,10 @@ module.exports = {
         ui: "./src/modules/ui.js",
         task: "./src/modules/task.js",
         todoList: "./src/modules/todoList.js",
-        project: "./src/modules/project.js"
+        project: "./src/modules/project.js",
         indexStyle: "./src/index-style.css"
     },
     mode: "development",
-    plugins: [
-
-    ],
     devtool: "inline-source-map",
     output: {
         filename: "[name].bundle.js",
